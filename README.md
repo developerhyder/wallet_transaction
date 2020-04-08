@@ -1,4 +1,4 @@
 #wallet transaction
 screenshots :
 
-![pic 1](screenshot/1.png)
+![pic 1](screenshots/1.png)
