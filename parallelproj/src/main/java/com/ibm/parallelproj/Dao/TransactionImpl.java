@@ -35,7 +35,6 @@ public class TransactionImpl implements Transaction{
 			throw new MinimumBalanceException("please make sure that you deposit more than 1000rs");
 		}
 		double pin = Utils.generatePin();
-		//did not do the incremental approach to the account id generation
 		double id = Utils.generateId();
 		
 		String sql = "INSERT INTO acc values(?,?,?,?)" ;
@@ -45,7 +44,6 @@ public class TransactionImpl implements Transaction{
 			try {
 				passBook(id, "createaccount", amount);
 			} catch (PassBookException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			Cons.id = id;
@@ -84,15 +82,15 @@ public class TransactionImpl implements Transaction{
 		if(jdbcTemplate.update(sql, total, id)==1)
 		{
 			try {
-				passBook(id, "deposited "+ Double.toString(amount), total);
+				if(Cons.id != id)
+					passBook(id, "recieved "+ Double.toString(amount), total);
+				else
+					passBook(id, "deposited "+ Double.toString(amount), total);
 			} catch (PassBookException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return 1;
-			//System.out.println("added money \n current Balance: "+ total);
 		}else{
-			//System.out.println("something went wrong");
 			return 0;
 		}
 	}
@@ -112,13 +110,10 @@ public class TransactionImpl implements Transaction{
 			try {
 				passBook(id, "withdrawal of "+ Double.toString(amount), total);
 			} catch (PassBookException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			//System.out.println("current Balance: "+ total);
 			return (int)total;
 		}else{
-			//System.out.println("something went wrong");
 			return -1;
 		}
 		
@@ -148,7 +143,6 @@ public class TransactionImpl implements Transaction{
 			}
 			return (int) total;
 		}else{
-			//System.out.println("something went wrong");
 			return -1;
 		}
 		
@@ -189,10 +183,9 @@ public class TransactionImpl implements Transaction{
 			
 			if(jdbcTemplate.update(sql)!=1)
 			{
-//				System.out.println("passbook creation was successfull");
+
 			}else{
-//				System.out.println("passbook creation went wrong");
-				//throw exceptions here
+
 				throw new PassBookException("something terrible happened during account creation");
 			}
 			
@@ -200,10 +193,8 @@ public class TransactionImpl implements Transaction{
 			
 			if(jdbcTemplate.update(sql1, ts.toString(),operation, balance)==1)
 			{
-				//System.out.println("updated passbook");
 			}else{
 				throw new PassBookException("something terrible happened during account updation");
-				//throw exceptions here
 			}
 		}else{
 			String sql1 = "INSERT INTO "+idd+" values(? , ?, ?)";
