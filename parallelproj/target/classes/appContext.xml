@@ -18,14 +18,8 @@
 	
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource" ref="dataSource" />
-	</bean>
-	<!--use this to implement the interface
-	 <bean id="transaction" class="com.ibm.trainer3.TransactionImpl" >
-		<property name="jdbcTemplate" ref="jdbcTemplate" />		
-	</bean>
- -->	
- 	<bean id ="transaction" class="com.ibm.parallelproj.Dao.TransactionImpl">
- 		<property name="jdbcTemplate" ref="jdbcTemplate" />
- 	</bean>
+	</bean>	
+ 	<context:annotation-config></context:annotation-config>
+ 	<context:component-scan base-package="com.ibm.parallelproj"></context:component-scan>
  	
 </beans>
